@@ -23,21 +23,24 @@ class App extends Component {
                 similarly.
                 </p>
             </div>
-            {/* <div id="theme-selection">
-                <Toggle 
-                  onSwitchOn={() => {this.setState({theme: 'dark'})}}
-                  onSwitchOff={() => {this.setState({theme: 'light'})}}
-                />
-                <p> Dark Mode </p>
-            </div> */}
         </div>
         <div id="main-body-parent">
-          <Plot updateCodeStatement={() => {}} />
+          <Plot 
+            updateCodeStatement={() => {}} 
+            theme={this.state.theme}
+          />
           <div className="button-and-code">
             <div style={{width: "100%"}}>
               {/* <AddDraw /> 
               <AddNode />
               <Redraw /> */}
+              <div id="theme-selection">
+                  <Toggle 
+                    onSwitchOn={() => {this.setState({theme: 'dark'})}}
+                    onSwitchOff={() => {this.setState({theme: 'light'})}}
+                  />
+                  <p> Dark Mode </p>
+              </div>
             </div>
             <CodeStatement coordinates={this.state.coordinates} />
           </div>
