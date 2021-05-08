@@ -1,8 +1,7 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "Computer Modern Serif", serif;
+  font-size: 12px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +9,130 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.light {
+  background-color: white; 
+  color: black;
+}
+
+.dark {
+  background-color: black;
+  color: white;
+}
+
+/* .body-light{
+  background-color: white;
+}
+
+.body-dark{
+  background-color: black;
+} */
+
+#text-heading{
+  text-align: center;
+  width: 100%;
+  margin: 5px auto;
+  /* color: white;  */
+}
+
+/* .text-heading-light{
+  color: black;
+}
+
+.text-heading-dark{
+  color: white;
+} */
+
+#description{
+  font-size: 20px;
+  border: 1px solid #EBEBEB;    
+}
+#sub_description{
+  font-size: 15px;
+}
+
+#main-body-parent {
+  flex: 1;
+  overflow: clip;
+  display: flex;
+  justify-content: space-around;
+}  
+
+#canvas{
+  width: 40%;
+  float: left;
+}
+
+.button-and-code{
+  /* width: 40%;  */
+  /* float: right; */
+  /* position: relative; */
+  flex: 1;
+}
+
+.cmd-buttons{
+  bottom: 100%;
+  font-family: "Computer Modern Serif", serif;
+  padding: 2px 4 px;
+  text-align: center;
+  float:left;
+  margin: auto;
+  width: 20%;
+}
+
+.redraw-button{
+  bottom: 100%;
+  font-family: "Computer Modern Serif", serif;
+  padding: 4px 8 px;
+  text-align: center;
+  float:left;
+  margin: auto;
+  width: 30%;
+}
+
+.codefont{
+  font-family: Consolas, "courier new";
+}
+
+#code-output{
+  /* margin: auto; */
+  float:left;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 105%;
+  width: 70%;
+  text-align: left;
+  color: black;
+}
+
+#theme-selection{
+  display: flex;
+  float: right;
+  margin-right: 10%;
+  align-items: center;
+}
+
+/* .theme-selection-light{
+  color: black;
+}
+
+.theme-selection-dark{
+  color: white;
+} */
+
+.axis path, .axis line {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;  /* Round any decimal pixels so it'll render nicely */
+}
+
+.dark-axis path, .dark-axis line {
+  fill: none;
+  stroke: white;
+  shape-rendering: crispEdges;
+}
+
+.dark-axis text {
+  fill: white;
 }
