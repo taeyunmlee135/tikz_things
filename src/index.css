@@ -14,11 +14,13 @@ code {
 .light {
   background-color: white; 
   color: black;
+  fill: black;
 }
 
 .dark {
   background-color: black;
   color: white;
+  fill: white;
 }
 
 /* .body-light{
