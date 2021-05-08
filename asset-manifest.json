@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/tikz-things/static/css/main.d46f02d3.chunk.css",
+    "main.js": "/tikz-things/static/js/main.f5bcbe04.chunk.js",
+    "main.js.map": "/tikz-things/static/js/main.f5bcbe04.chunk.js.map",
+    "runtime-main.js": "/tikz-things/static/js/runtime-main.095e9af0.js",
+    "runtime-main.js.map": "/tikz-things/static/js/runtime-main.095e9af0.js.map",
+    "static/js/2.298ed74a.chunk.js": "/tikz-things/static/js/2.298ed74a.chunk.js",
+    "static/js/2.298ed74a.chunk.js.map": "/tikz-things/static/js/2.298ed74a.chunk.js.map",
+    "static/js/3.c95dbf79.chunk.js": "/tikz-things/static/js/3.c95dbf79.chunk.js",
+    "static/js/3.c95dbf79.chunk.js.map": "/tikz-things/static/js/3.c95dbf79.chunk.js.map",
+    "index.html": "/tikz-things/index.html",
+    "static/css/main.d46f02d3.chunk.css.map": "/tikz-things/static/css/main.d46f02d3.chunk.css.map",
+    "static/js/2.298ed74a.chunk.js.LICENSE.txt": "/tikz-things/static/js/2.298ed74a.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.095e9af0.js",
+    "static/js/2.298ed74a.chunk.js",
+    "static/css/main.d46f02d3.chunk.css",
+    "static/js/main.f5bcbe04.chunk.js"
+  ]
+}
