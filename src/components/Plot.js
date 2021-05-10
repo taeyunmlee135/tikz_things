@@ -1,20 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3'; 
 
-// Colors of the points on the canvas
-const colors = ["rgb(50, 149, 237)", 
-"rgb(51, 88, 255)",
-"rgb(172, 18, 255)", 
-"rgb(255, 0, 0)",
-"rgb(255, 144, 0)",
-"rgb(0, 196, 3)", 
-"rgb(51, 204, 255)",
-"rgb(0, 102, 153)",
-"rgb(255, 0, 238)",
-"rgb(50, 149, 237)", 
-]
-
-
 const AXIS_TOP_MARGIN = 10; 
 const AXIS_RIGHT_MARGIN = 10;
 const AXIS_BOTTOM_MARGIN = 30; 
@@ -25,41 +11,52 @@ const RADIUS = 3;
 
 
 class Plot extends Component {
-    // state = {
-    //     points: [], // Initialize set of all points on canvas
-    //     // currFigure: 0, // Keeps track of which figure the user is editing
-    // }
+    state = {
+        svgRef: null,
+        xScale: null,
+        yScale: null,
+        // points: [], // Initialize set of all points on canvas
+        // currFigure: 0, // Keeps track of which figure the user is editing
+    }
 
-    static xScale; 
-    static yScale;
+    // static xScale; 
+    // static yScale;
 
     componentDidMount() {
-        const bounds = document.getElementById("plotWrapper").getBoundingClientRect(); 
-        const svgDim = Math.min(bounds.right, bounds.bottom) - 150;
+        // const bounds = document.getElementById("plotWrapper").getBoundingClientRect(); 
+        // const svgDim = Math.min(bounds.right, bounds.bottom) - 150;
 
-        // Setting x axis scale
-        this.xScale = d3.scaleLinear()
-                            .domain([0, 100]) // input values
-                            .range([0, svgDim-AXIS_LEFT_MARGIN-AXIS_RIGHT_MARGIN]); // [x,y] controls position of x-axis
+        // // Setting x axis scale
+        // this.xScale = d3.scaleLinear()
+        //                     .domain([0, 100]) // input values
+        //                     .range([0, svgDim-AXIS_LEFT_MARGIN-AXIS_RIGHT_MARGIN]); // [x,y] controls position of x-axis
 
-        this.yScale = d3.scaleLinear()
-                            .domain([0, 100])
-                            .range([svgDim-AXIS_TOP_MARGIN-AXIS_BOTTOM_MARGIN, 0]);  
+        // this.yScale = d3.scaleLinear()
+        //                     .domain([0, 100])
+        //                     .range([svgDim-AXIS_TOP_MARGIN-AXIS_BOTTOM_MARGIN, 0]);  
 
+        let { svg, svgDim, xScale, yScale } = this.props.initializeSvg();
+        console.log(svg);
+        this.setState({
+            svgRef: svg,
+            xScale,
+            yScale,
+        });
         // Setting axis
-        let xAxis = d3.axisBottom().scale(this.xScale);
-        let yAxis = d3.axisLeft().scale(this.yScale);
+        let xAxis = d3.axisBottom().scale(xScale);
+        let yAxis = d3.axisLeft().scale(yScale);
+        console.log(this.state.svgRef);
 
         let circleAttrs = {
-            cx: (d) => this.xScale(d.x),
-            cy: (d) => this.yScale(d.y),
+            cx: (d) => xScale(d.x),
+            cy: (d) => yScale(d.y),
             r: RADIUS,
             fill : this.props.figColor // This gets updated a lot
         };
 
-        const svg = d3.select("#canvas").append("svg")
-                                .attr("width", svgDim)
-                                .attr("height", svgDim);
+        // const svg = d3.select("#canvas").append("svg")
+        //                         .attr("width", svgDim)
+        //                         .attr("height", svgDim);
         
         svg.append("g")
                 .attr("class", `${this.props.theme}-axis`)
@@ -88,8 +85,8 @@ class Plot extends Component {
         // The textbox
         d3.select("svg").append("text")
             .attr("id", `t${d.x}-${d.y}-${d3.select("svg").nodes().indexOf(this)}`)
-            .attr("x", () => this.xScale(d.x) - 30)
-            .attr("y", () => this.yScale(d.y) - 15)
+            .attr("x", () => this.state.xScale(d.x) - 30)
+            .attr("y", () => this.state.yScale(d.y) - 15)
             .attr("class", `${this.props.theme}`)
             .text(() => [d.x, d.y]); // Textbox data
     }
@@ -106,8 +103,8 @@ class Plot extends Component {
             // Extract data of clicked point
             let coords = d3.pointer(event);
             let newData = {
-                x: Math.round(this.xScale.invert(coords[0])),  // Takes the pixel number to convert to number
-                y: Math.round(this.yScale.invert(coords[1]))
+                x: Math.round(this.state.xScale.invert(coords[0])),  // Takes the pixel number to convert to number
+                y: Math.round(this.state.yScale.invert(coords[1]))
             };
             // let newData = (
             //     Math.round(this.xScale.invert(coords[0])),

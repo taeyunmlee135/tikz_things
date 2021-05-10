@@ -5,6 +5,12 @@ import { Toggle, CmdButton } from './components/utilComps';
 import CodeStatement from './components/CodeStatement';
 import Plot from './components/Plot';
 
+import * as d3 from 'd3';
+
+const AXIS_TOP_MARGIN = 10; 
+const AXIS_RIGHT_MARGIN = 10;
+const AXIS_BOTTOM_MARGIN = 30; 
+const AXIS_LEFT_MARGIN = 30;
 // Colors of the points on the canvas
 const colors = [
   "rgb(50, 149, 237)", 
@@ -37,15 +43,34 @@ class App extends Component {
     //   fig_0 : []
     // },
   };
+  static svgRef; 
+  static xScale; 
+  static yScale;
 
   // initializeSvg --> pass as prop into Plot.js (?) 
-  // initializeSvg = (canvasId) => {
+  initializeSvg = () => {
+    const bounds = document.getElementById("plotWrapper").getBoundingClientRect(); 
+    const svgDim = Math.min(bounds.right, bounds.bottom) - 150;
 
+    // Setting x axis scale
+    this.xScale = d3.scaleLinear()
+                        .domain([0, 100]) // input values
+                        .range([0, svgDim-AXIS_LEFT_MARGIN-AXIS_RIGHT_MARGIN]); // [x,y] controls position of x-axis
 
+    this.yScale = d3.scaleLinear()
+                        .domain([0, 100])
+                        .range([svgDim-AXIS_TOP_MARGIN-AXIS_BOTTOM_MARGIN, 0]);
+    
+    this.svgRef = d3.select("#canvas").append("svg")
+                        .attr("width", svgDim)
+                        .attr("height", svgDim);
+    
+    console.log(this.svgRef);
+    return { svg: this.svgRef, svgDim, xScale: this.xScale, yScale: this.yScale }
   //   this.setState({
   //     svgRef: svg
   //   })
-  // }
+  }
 
   createCodeStatement = (statementType) => {
     // this.setState({
@@ -55,30 +80,31 @@ class App extends Component {
     // if (this.state.onFigure !== 0){
     if (this.state.currCodeStatement !== INIT_CODE_STATEMENT) {
       // We check if the user just finished drawing something. If so, we draw lines between their points.
-    //   if(currCodeStatement.statementType == "draw"){
-    //       // Draw lines between points.
-    //       current_fig = figures[`fig_${on_figure}`]; 
-    //       for(let i = 0; i < current_fig.length; i++){ // Loop over (x,y) coordinates; connect a line from (x_i,y_i) to (x_{i+1}, y_{i+1}). 
-    //           if(i == current_fig.length-1){
-    //             svg.append('line')
-    //             .style("stroke", colors[on_figure])
-    //             .style("stroke-width", 1)
-    //             .attr("x1", xScale(current_fig[0].x))
-    //             .attr("y1", yScale(current_fig[0].y))
-    //             .attr("x2", xScale(current_fig[i].x))
-    //             .attr("y2", yScale(current_fig[i].y));             
-    //           }
-    //           else{
-    //             svg.append('line')
-    //             .style("stroke", colors[on_figure])
-    //             .style("stroke-width", 1)
-    //             .attr("x1", xScale(current_fig[i].x))
-    //             .attr("y1", yScale(current_fig[i].y))
-    //             .attr("x2", xScale(current_fig[i+1].x))
-    //             .attr("y2", yScale(current_fig[i+1].y)); 
-    //           }
-    //         }
-    //       }
+      if(this.state.currCodeStatement.statementType == "draw"){
+          // Draw lines between points.
+          // current_fig = figures[`fig_${on_figure}`]; 
+          const currPoints = this.state.currCodeStatement.points;
+          for(let i = 0; i < currPoints.length; i++){ // Loop over (x,y) coordinates; connect a line from (x_i,y_i) to (x_{i+1}, y_{i+1}). 
+              if(i == currPoints.length-1){
+                this.svgRef.append('line')
+                .style("stroke", colors[this.state.onFigure])
+                .style("stroke-width", 1)
+                .attr("x1", this.xScale(currPoints[0].x))
+                .attr("y1", this.yScale(currPoints[0].y))
+                .attr("x2", this.xScale(currPoints[i].x))
+                .attr("y2", this.yScale(currPoints[i].y));             
+              }
+              else{
+                this.svgRef.append('line')
+                .style("stroke", colors[this.state.onFigure])
+                .style("stroke-width", 1)
+                .attr("x1", this.xScale(currPoints[i].x))
+                .attr("y1", this.yScale(currPoints[i].y))
+                .attr("x2", this.xScale(currPoints[i+1].x))
+                .attr("y2", this.yScale(currPoints[i+1].y)); 
+              }
+            }
+          }
       // We update global variables now that we are on a different figure. 
       // save previous codeStatement into this.state.codeStatements
       // reinitialize currCodeStatement 
@@ -198,6 +224,7 @@ class App extends Component {
         <div id="main-body-parent">
             {/* figures={this.getAllPoints()} */}
           <Plot 
+            initializeSvg={this.initializeSvg}
             figColor={colors[this.state.onFigure]}
             currCodeStatement={this.state.currCodeStatement}
             updateCodeStatement={this.updateCodeStatement} 
