@@ -3,43 +3,19 @@ import * as d3 from 'd3';
 
 import { AXIS_TOP_MARGIN, AXIS_RIGHT_MARGIN, AXIS_BOTTOM_MARGIN, AXIS_LEFT_MARGIN } from '../App';
 
-
 const RADIUS = 3;
-
-
 
 class Plot extends Component {
     static xScale;
     static yScale;
 
-    componentDidMount() {
-        
-
-        // const bounds = document.getElementById("plotWrapper").getBoundingClientRect(); 
-        // const svgDim = Math.min(bounds.right, bounds.bottom) - 150;
-
-        // // Setting x axis scale
-        // this.xScale = d3.scaleLinear()
-        //                     .domain([0, 100]) // input values
-        //                     .range([0, svgDim-AXIS_LEFT_MARGIN-AXIS_RIGHT_MARGIN]); // [x,y] controls position of x-axis
-
-        // this.yScale = d3.scaleLinear()
-        //                     .domain([0, 100])
-        //                     .range([svgDim-AXIS_TOP_MARGIN-AXIS_BOTTOM_MARGIN, 0]);  
-        console.log(this.xScale, this.props);
+    componentDidMount() { 
         let { svg, svgDim, xScale, yScale } = this.props.initializeSvg();
         this.xScale = xScale;
         this.yScale = yScale;
-        // console.log(svg);
-        // this.setState({
-        //     svgRef: svg,
-        //     xScale,
-        //     yScale,
-        // });
         // Setting axis
         let xAxis = d3.axisBottom().scale(this.xScale);
         let yAxis = d3.axisLeft().scale(this.yScale);
-        // console.log(this.state.svgRef);
 
         let circleAttrs = {
             cx: (d) => this.xScale(d.x),
@@ -48,10 +24,6 @@ class Plot extends Component {
             fill : this.props.figColor // This gets updated a lot
         };
 
-        // const svg = d3.select("#canvas").append("svg")
-        //                         .attr("width", svgDim)
-        //                         .attr("height", svgDim);
-        
         svg.append("g")
                 .attr("class", `${this.props.theme}-axis`)
                 .attr("transform", `translate(${[AXIS_LEFT_MARGIN, svgDim-AXIS_BOTTOM_MARGIN]})`)  //[x, y] controls position 
@@ -100,18 +72,9 @@ class Plot extends Component {
                 x: Math.round(this.xScale.invert(coords[0])),  // Takes the pixel number to convert to number
                 y: Math.round(this.yScale.invert(coords[1]))
             };
-            // let newData = (
-            //     Math.round(this.xScale.invert(coords[0])),
-            //     Math.round(this.yScale.invert(coords[1]))
-            // );
-
-            // this.props.currCodeStatement.point = `(${newData.x/10}, ${newData.y/10}) `;
-            console.log('calling', newData);
-            // // Draw point on the canvas
-            // this.state.points.push(newData);
-            // this.props.figures[`fig_${this.state.currFigure}`].push(newData); // adds point to the new figure
+            
+            // Draw point on the canvas
             this.props.updateCodeStatement(newData);
-            console.log(this.props.currCodeStatement);
             svg.selectAll(`.circle-fig_${this.props.onFigure}`) 
                 .data(this.props.currCodeStatement.points)
                 .enter()
@@ -121,7 +84,6 @@ class Plot extends Component {
                 .attr("r", circleAttrs.r)
                 .attr("fill", this.props.figColor)
                 .attr("class", `circle-fig_${this.props.onFigure}`)
-                // .attr("id", `c-fig_${this.state.currFigure}-${this.props.figures[`fig_${this.state.currFigure}`].length-1}`)
                 .on("mouseover", this.handleMouseOver)
                 .on("mouseout", this.handleMouseOut)
         }

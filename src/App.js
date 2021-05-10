@@ -35,18 +35,14 @@ const INIT_CODE_STATEMENT = {
 class App extends Component {
   state = {
     theme: "light",
-    // coordinates: [],
     codeStatements: [], // array [{ statementType, preamble, points, end }...]
     currCodeStatement: INIT_CODE_STATEMENT,
     onFigure: 0,
-    // figures: { // "figures" maintains an object of arrays; each array is an (x,y) list of points which makes up a figure.
-    //   fig_0 : []
-    // },
   };
   static xScale; 
   static yScale;
 
-  // initializeSvg --> pass as prop into Plot.js (?) 
+  // pass as prop into Plot.js so xScale, yScale can be accessed at top level
   initializeSvg = () => {
     const bounds = document.getElementById("plotWrapper").getBoundingClientRect(); 
     const svgDim = Math.min(bounds.right, bounds.bottom) - 150;
@@ -69,12 +65,10 @@ class App extends Component {
 
   createCodeStatement = (statementType) => {
     // First, we check if this is not the first figure the user has drawn.
-    // if (this.state.onFigure !== 0){
     if (this.state.currCodeStatement !== INIT_CODE_STATEMENT) {
       // We check if the user just finished drawing something. If so, we draw lines between their points.
       if(this.state.currCodeStatement.statementType == "draw"){
           // Draw lines between points.
-          // current_fig = figures[`fig_${on_figure}`]; 
           const currPoints = this.state.currCodeStatement.points;
           for(let i = 0; i < currPoints.length; i++){ // Loop over (x,y) coordinates; connect a line from (x_i,y_i) to (x_{i+1}, y_{i+1}). 
               if(i == currPoints.length-1){
@@ -108,19 +102,8 @@ class App extends Component {
         onFigure: this.state.onFigure+1 // Very important. Let's all other functions know that, from now on, we're moving onto a different drawing 
       }); 
     }
-
-    
-    // this.state.figures[`fig_${this.state.onFigure}`] = []; // Initialize array which will contain new incoming (x,y) coordinates.
-    // circleAttrs["fill"] = colors[on_figure]; // Give it a different color.
-      
-    
-
-
     // Next, we work on setting up their new TikZ code.
-    // We create a new span element for the incoming TikZ code
-    // let newTikZCode = document.createElement("span");
-
-    // We update currCodeStatement, and the span id, based on what type of statement the user wants.
+    // We update currCodeStatement, based on what type of statement the user wants.
     if (statementType === "draw"){
       this.setState({
         currCodeStatement: {
@@ -141,46 +124,10 @@ class App extends Component {
         }
       });
     }
-
-    // let newTikZCode = 
-    //   <div style={{color: colors[this.state.onFigure]}} id={`statement-fig_${this.state.onFigure}`}>
-    //     {`${this.state.currCodeStatement.preamble} ${this.state.currCodeStatement.end}`}
-    //   </div>;
-
-    // let updatedCoords = [...this.state.coordinates]
-    // updatedCoords.push(newTikZCode);
-    
-    // this.setState({
-    //   coordinates: updatedCoords
-    // });
-    
-    // // Edit TikZ code span tag
-    // newTikZCode.id = `statement-fig_${onFigure}`;
-    // newTikZCode.innerHTML = currCodeStatement.preamble + currCodeStatement.end;
-    // newTikZCode.style = "color:" + colors[onFigure];
-
-    // // Add the new span element to HTML 
-    // document.getElementById("coordinates").appendChild(newTikZCode);
-
   }
 
   updateCodeStatement = (newPoint) => {
-    // console.log('updating code statement', newPoint);
-    /* We update the TikZ code output (because the user clicked a new point). 
-       We do this by 
-        1. Figuring out where in our string (coordinates.innerHTML) to add the new coordinate to the TikZ command
-        2. Add the new coordinate 
-        3. Update the TiKZ command
-    */
-    // let current_id = `statement-fig_${this.state.onFigure}`;
-    // let n_Chars = document.getElementById(current_id).innerHTML.length; 
-    // let n_endCodeChars = this.state.currCodeStatement.end.length;
-
-    // let newStatement = document.getElementById(current_id).innerHTML.substring(0, n_Chars - n_endCodeChars); //We've figured out where to add our coordinate.
-    // newStatement += this.state.currCodeStatement.point ; // Add the new coordinate 
-    // newStatement += this.state.currCodeStatement.end;    // Add the end code, e.g., it could be "};"
-    // document.getElementById(current_id).innerHTML = newStatement;     // Update the page with the new TikZ code
-
+    /* We update the TikZ code output (because the user clicked a new point). */
     // append newPoint to currCodeStatement.points
     let updatedPoints = [...this.state.currCodeStatement.points];
     updatedPoints.push(newPoint);
@@ -194,29 +141,14 @@ class App extends Component {
   }
 
   redoCurrentStatement = () => {
-    // let tuples = figures["fig_" + String(on_figure)];
-    // for(let i = 0; i < tuples.length; i++){
-    //     d3.select("#c" + "-" + "fig_" + String(on_figure) + "-" + i).remove(); //remove the circles
-    //     points.pop(); //remove the circle's data from "points"
-    // }
-    // figures["fig_" + String(on_figure)] = [];
-    // document.getElementById("statement-fig_" + String(on_figure)).innerHTML = currCodeStatement.preamble + currCodeStatement.end;
-    
     d3.select("svg").selectAll(`.circle-fig_${this.state.onFigure}`).remove();
     this.setState({
       currCodeStatement: {
         ...this.state.currCodeStatement,
         points: [],
       }
-    })
-}
-
-  // // not sure if this is necessary
-  // getAllPoints = () => {
-  //   let allPoints = [];
-  //   this.state.codeStatements.forEach((cs) => allPoints.concat(cs.points));
-  //   allPoints.concat(this.state.currCodeStatement.points);
-  // }
+    });
+  }
 
   render() {
     return (
@@ -231,7 +163,6 @@ class App extends Component {
             </div>
         </div>
         <div id="main-body-parent">
-            {/* figures={this.getAllPoints()} */}
           <Plot 
             initializeSvg={this.initializeSvg}
             figColor={colors[this.state.onFigure]}
