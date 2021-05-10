@@ -80,7 +80,8 @@ code {
   text-align: center;
   float:left;
   margin: auto;
-  width: 20%;
+  width: auto;
+  /* width: 20%; */
 }
 
 .redraw-button{
