@@ -43,7 +43,6 @@ class App extends Component {
     //   fig_0 : []
     // },
   };
-  static svgRef; 
   static xScale; 
   static yScale;
 
@@ -61,21 +60,14 @@ class App extends Component {
                         .domain([0, 100])
                         .range([svgDim-AXIS_TOP_MARGIN-AXIS_BOTTOM_MARGIN, 0]);
     
-    this.svgRef = d3.select("#canvas").append("svg")
+    const svg = d3.select("#canvas").append("svg")
                         .attr("width", svgDim)
                         .attr("height", svgDim);
     
-    console.log(this.svgRef);
-    return { svg: this.svgRef, svgDim, xScale: this.xScale, yScale: this.yScale }
-  //   this.setState({
-  //     svgRef: svg
-  //   })
+    return { svg, svgDim, xScale: this.xScale, yScale: this.yScale };
   }
 
   createCodeStatement = (statementType) => {
-    // this.setState({
-    //   onFigure: this.state.onFigure+1, // Very important. Let's all other functions know that, from now on, we're moving onto a different drawing 
-    // })
     // First, we check if this is not the first figure the user has drawn.
     // if (this.state.onFigure !== 0){
     if (this.state.currCodeStatement !== INIT_CODE_STATEMENT) {
@@ -86,7 +78,7 @@ class App extends Component {
           const currPoints = this.state.currCodeStatement.points;
           for(let i = 0; i < currPoints.length; i++){ // Loop over (x,y) coordinates; connect a line from (x_i,y_i) to (x_{i+1}, y_{i+1}). 
               if(i == currPoints.length-1){
-                this.svgRef.append('line')
+                d3.select("svg").append('line')
                 .style("stroke", colors[this.state.onFigure])
                 .style("stroke-width", 1)
                 .attr("x1", this.xScale(currPoints[0].x))
@@ -95,7 +87,7 @@ class App extends Component {
                 .attr("y2", this.yScale(currPoints[i].y));             
               }
               else{
-                this.svgRef.append('line')
+                d3.select("svg").append('line')
                 .style("stroke", colors[this.state.onFigure])
                 .style("stroke-width", 1)
                 .attr("x1", this.xScale(currPoints[i].x))
