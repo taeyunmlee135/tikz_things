@@ -1,24 +1,14 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3'; 
 
-const AXIS_TOP_MARGIN = 10; 
-const AXIS_RIGHT_MARGIN = 10;
-const AXIS_BOTTOM_MARGIN = 30; 
-const AXIS_LEFT_MARGIN = 30;
+import { AXIS_TOP_MARGIN, AXIS_RIGHT_MARGIN, AXIS_BOTTOM_MARGIN, AXIS_LEFT_MARGIN } from '../App';
+
 
 const RADIUS = 3;
 
 
 
 class Plot extends Component {
-    // state = {
-    //     svgRef: null,
-    //     xScale: null,
-    //     yScale: null,
-    //     // points: [], // Initialize set of all points on canvas
-    //     // currFigure: 0, // Keeps track of which figure the user is editing
-    // }
-
     static xScale;
     static yScale;
 
@@ -122,7 +112,7 @@ class Plot extends Component {
             // this.props.figures[`fig_${this.state.currFigure}`].push(newData); // adds point to the new figure
             this.props.updateCodeStatement(newData);
             console.log(this.props.currCodeStatement);
-            svg.selectAll(`.circle-fig${this.props.onFigure}`) 
+            svg.selectAll(`.circle-fig_${this.props.onFigure}`) 
                 .data(this.props.currCodeStatement.points)
                 .enter()
                 .append("circle")

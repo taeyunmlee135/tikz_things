@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import './App.css';
 
 import { Toggle, CmdButton } from './components/utilComps';
-import CodeStatement from './components/CodeStatement';
+import CodeStatement from './components/CodeOutput';
 import Plot from './components/Plot';
 
 import * as d3 from 'd3';
 
-const AXIS_TOP_MARGIN = 10; 
-const AXIS_RIGHT_MARGIN = 10;
-const AXIS_BOTTOM_MARGIN = 30; 
-const AXIS_LEFT_MARGIN = 30;
+export const AXIS_TOP_MARGIN = 10; 
+export const AXIS_RIGHT_MARGIN = 10;
+export const AXIS_BOTTOM_MARGIN = 30; 
+export const AXIS_LEFT_MARGIN = 30;
 // Colors of the points on the canvas
 export const colors = [
   "rgb(50, 149, 237)", 
@@ -137,7 +137,7 @@ class App extends Component {
           statementType: "node",
           preamble: "\\node at ",
           points: [],
-          end: "{};<br>",
+          end: "{};\n",
         }
       });
     }
@@ -193,6 +193,24 @@ class App extends Component {
     console.log('updated points', this.state);
   }
 
+  redoCurrentStatement = () => {
+    // let tuples = figures["fig_" + String(on_figure)];
+    // for(let i = 0; i < tuples.length; i++){
+    //     d3.select("#c" + "-" + "fig_" + String(on_figure) + "-" + i).remove(); //remove the circles
+    //     points.pop(); //remove the circle's data from "points"
+    // }
+    // figures["fig_" + String(on_figure)] = [];
+    // document.getElementById("statement-fig_" + String(on_figure)).innerHTML = currCodeStatement.preamble + currCodeStatement.end;
+    
+    d3.select("svg").selectAll(`.circle-fig_${this.state.onFigure}`).remove();
+    this.setState({
+      currCodeStatement: {
+        ...this.state.currCodeStatement,
+        points: [],
+      }
+    })
+}
+
   // // not sure if this is necessary
   // getAllPoints = () => {
   //   let allPoints = [];
@@ -226,7 +244,7 @@ class App extends Component {
             <div style={{width: "100%"}}>
               <CmdButton onClick={() => this.createCodeStatement("draw")} label={"Add \\draw"} /> 
               <CmdButton onClick={() => this.createCodeStatement("node")} label={"Add \\node"} /> 
-              <CmdButton onClick={() => {}} label={"Redo Current Statement"} /> 
+              <CmdButton onClick={this.redoCurrentStatement} label={"Redo Current Statement"} /> 
               <div id="theme-selection">
                   <Toggle 
                     onSwitchOn={() => {this.setState({theme: 'dark'})}}
