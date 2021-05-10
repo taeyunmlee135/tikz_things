@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
+import { colors } from '../App';
 
-const CodeStatement = ({ codeStatements, currCodeStatement, colors }) => {
+const CodeStatement = ({ codeStatements, currCodeStatement }) => {
     console.log(codeStatements.length);
 
     const formatPoints = (points) => {

@@ -12,7 +12,7 @@ const AXIS_RIGHT_MARGIN = 10;
 const AXIS_BOTTOM_MARGIN = 30; 
 const AXIS_LEFT_MARGIN = 30;
 // Colors of the points on the canvas
-const colors = [
+export const colors = [
   "rgb(50, 149, 237)", 
   "rgb(51, 88, 255)",
   "rgb(172, 18, 255)", 
@@ -107,7 +107,6 @@ class App extends Component {
         currCodeStatement: INIT_CODE_STATEMENT,
         onFigure: this.state.onFigure+1 // Very important. Let's all other functions know that, from now on, we're moving onto a different drawing 
       }); 
-      // console.log('updated code statements', this.state);
     }
 
     
@@ -239,7 +238,6 @@ class App extends Component {
             <CodeStatement 
               codeStatements={this.state.codeStatements} 
               currCodeStatement={this.state.currCodeStatement}
-              colors={colors}
             />
           </div>
         </div>
